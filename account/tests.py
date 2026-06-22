@@ -1,9 +1,21 @@
-from django.test import TestCase, Client
+import io
+import tempfile
+
+from django.test import TestCase, Client, override_settings
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
+from PIL import Image
 from .models import Profile, Contact
 from .forms import LoginForm, UserRegistrationForm
 from .authentication import EmailAuthBackend
+
+
+def _tiny_png():
+    """A 1x1 PNG upload, so detail.html's {% thumbnail %} has a real source."""
+    buf = io.BytesIO()
+    Image.new('RGB', (1, 1)).save(buf, 'PNG')
+    return SimpleUploadedFile('p.png', buf.getvalue(), content_type='image/png')
 
 
 class UserModelTests(TestCase):
@@ -82,6 +94,25 @@ class ViewTests(TestCase):
         self.client.login(username='dave', password='secret123')
         response = self.client.get(reverse('account:dashboard'))
         self.assertEqual(response.status_code, 200)
+
+    @override_settings(MEDIA_ROOT=tempfile.mkdtemp())
+    def test_user_detail_reflects_follow_state(self):
+        self.client.login(username='dave', password='secret123')
+        target = User.objects.create_user(username='frank', password='abc123')
+        Profile.objects.create(user=target, photo=_tiny_png())
+        url = reverse('account:user_detail', args=['frank'])
+
+        # Not following yet: zero followers, no follow state.
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.context['followers_count'], 0)
+        self.assertFalse(resp.context['is_following'])
+
+        # After following, the page reflects it.
+        Contact.objects.create(user_from=self.user, user_to=target)
+        resp = self.client.get(url)
+        self.assertEqual(resp.context['followers_count'], 1)
+        self.assertTrue(resp.context['is_following'])
 
     def test_follow_and_unfollow_user(self):
         self.client.login(username='dave', password='secret123')
