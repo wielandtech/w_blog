@@ -47,6 +47,16 @@ COPY --from=builder /opt/venv /opt/venv
 WORKDIR /wielandtech
 COPY . .
 
+# Fail the build if any model change lacks a committed migration, making the
+# committed migrations the single source of truth for the schema. This lets the
+# runtime start with `migrate` alone, without a `makemigrations` fallback that
+# would silently auto-generate (and apply) unreviewed migrations in-cluster.
+# --check needs no database; the sqlite/dummy env just lets settings import.
+RUN DATABASE_ENGINE=sqlite \
+    RECAPTCHA_PUBLIC_KEY=dummy \
+    RECAPTCHA_PRIVATE_KEY=dummy \
+    python manage.py makemigrations --check --dry-run
+
 EXPOSE 8000
 
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "wielandtech.wsgi:application"]
