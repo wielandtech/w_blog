@@ -31,10 +31,15 @@ def user_detail(request, username):
     user = get_object_or_404(User,
                              username=username,
                              is_active=True)
+    followers_count = Contact.objects.filter(user_to=user).count()
+    is_following = Contact.objects.filter(user_from=request.user,
+                                          user_to=user).exists()
     return render(request,
                   'account/user/detail.html',
                   {'section': 'people',
-                   'user': user})
+                   'user': user,
+                   'followers_count': followers_count,
+                   'is_following': is_following})
 
 
 def user_login(request):
@@ -119,7 +124,8 @@ def edit(request):
 def dashboard(request):
     # Display all actions by default
     actions = Action.objects.exclude(user=request.user)
-    following_ids = request.user.following.values_list('id', flat=True)
+    following_ids = Contact.objects.filter(
+        user_from=request.user).values_list('user_to_id', flat=True)
     if following_ids:
         # If user is following others, retrieve only their actions
         actions = actions.filter(user_id__in=following_ids)

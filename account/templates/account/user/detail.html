@@ -6,20 +6,18 @@
         <h1>{{ user.get_full_name }}</h1>
         <img src="{% thumbnail user.profile.photo 180x180 %}" class="user-detail" alt="{{ user.get_full_name }}'s profile picture">
         <div class="follow-info">
-            {% with total_followers=user.followers.count %}
-                <span class="count">
-                    <span class="total">{{ total_followers }}</span>
-                    follower{{ total_followers|pluralize }}
-                </span>
-                <br>
-                <a href="#" data-id="{{ user.id }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow button">
-                    {% if request.user not in user.followers.all %}
-                        Follow
-                    {% else %}
-                        Unfollow
-                    {% endif %}
-                </a>
-            {% endwith %}
+            <span class="count">
+                <span class="total">{{ followers_count }}</span>
+                follower{{ followers_count|pluralize }}
+            </span>
+            <br>
+            <a href="#" data-id="{{ user.id }}" data-action="{% if is_following %}un{% endif %}follow" class="follow button">
+                {% if is_following %}
+                    Unfollow
+                {% else %}
+                    Follow
+                {% endif %}
+            </a>
         </div>
     </div>
     <div id="image-list" class="image-grid">
