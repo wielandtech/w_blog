@@ -17,8 +17,12 @@ class UserModelTests(TestCase):
 
     def test_following_relationship(self):
         Contact.objects.create(user_from=self.user1, user_to=self.user2)
-        self.assertIn(self.user2, self.user1.following.all())
-        self.assertIn(self.user1, self.user2.followers.all())
+        # user1 follows user2 (user1 is the source of the contact)
+        self.assertIn(self.user2,
+                      User.objects.filter(rel_to_set__user_from=self.user1))
+        # user2 is followed by user1 (user2 is the target of the contact)
+        self.assertIn(self.user1,
+                      User.objects.filter(rel_from_set__user_to=self.user2))
 
 
 class AuthBackendTests(TestCase):

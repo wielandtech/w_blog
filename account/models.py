@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth import get_user_model
 
 
 class Profile(models.Model):
@@ -27,12 +26,3 @@ class Contact(models.Model):
 
     def __str__(self):
         return f'{self.user_from} follows {self.user_to}'
-
-
-# Add following field to User dynamically
-user_model = get_user_model()
-user_model.add_to_class('following',
-                        models.ManyToManyField('self',
-                                               through=Contact,
-                                               related_name='followers',
-                                               symmetrical=False))
