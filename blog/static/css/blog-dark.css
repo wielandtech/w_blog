@@ -96,13 +96,46 @@
   outline: none;
 }
 
-/* Code blocks */
-pre, code {
+/* Code blocks (fenced) — Pygments supplies the dark background and colors */
+.post pre,
+.post .codehilite {
+  padding: 1rem;
+  margin: 1rem 0;
+  border: 1px solid var(--blog-border);
+  border-radius: 6px;
+  overflow-x: auto;
+  line-height: 1.5;
+  font-family: 'Consolas', monospace;
+}
+
+/* Don't double-style code inside a block — let Pygments' palette show through */
+.post pre code,
+.post .codehilite code,
+.post .codehilite pre {
+  background: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+  color: inherit;
+}
+
+/* Inline code */
+.post code {
   background-color: var(--blog-tag-bg);
   color: var(--blog-text);
-  padding: 8px;
+  padding: 0.15em 0.4em;
   border-radius: 4px;
+  font-size: 0.9em;
   font-family: 'Consolas', monospace;
+}
+
+/* Images embedded in post bodies fit the content column */
+.post img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1rem 0;
+  border-radius: 4px;
 }
 
 /* Blockquotes */

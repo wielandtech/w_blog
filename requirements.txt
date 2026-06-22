@@ -6,6 +6,7 @@ django-taggit==6.1.0
 dotenv==0.9.9
 gunicorn==21.2.0
 Markdown==3.7
+Pygments==2.18.0
 psycopg2-binary==2.9.10
 pillow==11.1.0
 python-dotenv==1.0.1

@@ -11,7 +11,11 @@ register = template.Library()
 
 @register.filter(name='markdown')
 def markdown_format(text):
-    return mark_safe(markdown.markdown(text))
+    return mark_safe(markdown.markdown(
+        text,
+        extensions=['fenced_code', 'codehilite'],
+        extension_configs={'codehilite': {'guess_lang': False}},
+    ))
 
 
 

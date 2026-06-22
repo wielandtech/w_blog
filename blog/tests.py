@@ -120,3 +120,18 @@ class FeedTests(TestCase):
         resp = self.client.get(reverse('blog:post_feed'))
         self.assertEqual(resp.status_code, 200)
         self.assertIn(b'New post', resp.content)
+
+
+class BlogTemplateTagTests(TestCase):
+    def test_fenced_code_block_renders_highlighted(self):
+        from .templatetags.blog_tags import markdown_format
+        html = markdown_format('```python\nprint("hi")\n```')
+        self.assertIn('class="codehilite"', html)
+        self.assertIn('<pre>', html)
+        # The literal fences must not leak through as text.
+        self.assertNotIn('```', html)
+
+    def test_inline_code_renders(self):
+        from .templatetags.blog_tags import markdown_format
+        html = markdown_format('Use `pip install` to install.')
+        self.assertIn('<code>pip install</code>', html)
