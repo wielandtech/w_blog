@@ -9,6 +9,22 @@
 
 	<h2 class="secondary">Projects</h2>
 
+	<p class="date float_right">2021&ndash;2026</p>
+
+	<p class="job"><a href="https://warn.wielandtech.com/" target="_blank">WARN Tracker</a> - Python Application</p>
+
+	<p>
+		Built a public dashboard that scrapes, enriches, and tracks Worker Adjustment and Retraining Notification (WARN) layoff and closure notices across US states &mdash; an AI-assisted rebuild of the original 2021 spreadsheet-based scraper.
+	</p>
+
+	<ul>
+		<li><strong>Resilient Scraping Pipeline:</strong> A fetch/parse split saves a replayable snapshot on every failure, so a broken state parser can be reproduced and repaired quickly when a state site reformats.</li>
+		<li><strong>LLM-Powered Enrichment:</strong> A Claude-driven agent enriches each company via web search and free public sources, surfacing affected workers roughly 60 days before layoff.</li>
+		<li><strong>API &amp; Dashboard:</strong> FastAPI read-only API with a bundled single-page frontend for browsing and filtering notices, plus CSV/spreadsheet export.</li>
+		<li><strong>Production Deployment:</strong> Runs as a K3s CronJob with CloudNativePG-backed Postgres, deployed via Helm and Flux GitOps.</li>
+	</ul>
+	<br>
+
 	<p class="date float_right">2025</p>
 
 	<p class="job"><a href="https://github.com/wielandtech-labs/w_lab" target="_blank">w/homelab</a> - Kubernetes Homelab</p>
@@ -57,19 +73,6 @@
 		<li><strong>RSS Feed Generation:</strong> Built a dynamic RSS feed generator to syndicate content, automatically updating with new blog posts and supporting filtering by tag or category.</li>
 		<li><strong>Admin and Author Workflows:</strong> Leveraged Django’s admin interface for content moderation and editorial workflows, enhancing usability for non-technical content creators.</li>
 		<li><strong>Clean, Responsive UI:</strong> Developed a responsive front-end using HTML, CSS, and Django templates, ensuring a smooth reading experience across devices.</li>
-	</ul>
-	<br>
-
-	<p class="date float_right">2022</p>
-
-	<p class="job">WARN Headhunter - Python Application</p>
-
-	<p>This Python application scrapes and parses the Worker Adjustment and Retraining Notifications of all available states.</p>
-
-	<ul>
-		<li>The notifications are originally stored in HTML, XLS, and PDF formats and parsed by the BeautifulSoup4, Pandas, and Tabula frameworks, respectively.</li>
-		<li>The resulting parsed notifications are stored in a Google Spreadsheet and populated with D.U.N.S. and NAICS codes.</li>
-		<li>Combined, this allows workers within targeted industries to be found via LinkedIn and recruited 60 days before they are laid-off.</li>
 	</ul>
 	<br>
 
